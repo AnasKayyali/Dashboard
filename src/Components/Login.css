@@ -1,0 +1,72 @@
+.border1{
+    border-bottom-left-radius: 20px;
+}
+
+.border2{
+    border-top-right-radius: 20px;
+}
+
+.top{
+    top:17px;
+}
+
+.input2:focus{
+    outline: none; 
+    border-color: #BDBBB8;
+    box-shadow: 0 0 3px #BDBBB8;
+}
+
+.pa-y{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.checkstyle{
+    width:19px;
+    height:19px;
+}
+
+
+
+
+@media only screen and (max-width: 600px) {
+   .gap-icon{
+    gap: 1rem; 
+   }
+}
+
+
+
+
+
+ @media only screen and (max-width: 499px) and (min-width: 0px) {
+    .in-w{
+     width: 18rem;
+    }
+ }
+
+ @media only screen and (max-width: 991px) and (min-width: 499px) {
+    .in-w{
+     width: 14rem;
+    }
+ }
+
+ 
+ @media only screen and (max-width: 1024px) and (min-width: 992px) {
+    .in-w{
+     width: 14rem;
+    }
+ }
+
+ @media only screen and (max-width: 1300px) and (min-width: 1100px) {
+    .in-w{
+     width: 16rem;
+    }
+ }
+
+ @media only screen and (max-width: 1800px) and (min-width: 1300px) {
+    .in-w{
+     width: 20rem;
+    }
+ }
+
