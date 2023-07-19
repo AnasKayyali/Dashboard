@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import logo from '../assets/favicon.ico'
 import './Login.css'
 import axios from 'axios';
 import Cookie from "cookie-universal"
@@ -24,7 +23,7 @@ const Login = () => {
     setChecked(!checked);
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
     try {
         await axios.post('https://vv3eyp0jq4.execute-api.eu-central-1.amazonaws.com/test/api/dashboard/auth/admin-login',
@@ -47,7 +46,7 @@ const Login = () => {
         <div className="grid justify-content-center">
             <div className="gr sm:col-12 md:col-5 lg:col-4 bg-blue-500 border1 pt-5">
                 <div className='flex justify-content-center'>
-                    <img src={logo} className="w-11rem" alt="logo"/>
+                    <img src="/public/assets/favicon.ico" className="w-11rem" alt="logo"/>
                 </div>
                 <div className="p-5 mb-6 mt-2">
                     <p className="text-center text-white text-lg" style={{fontFamily:'Inconsolata'}}>

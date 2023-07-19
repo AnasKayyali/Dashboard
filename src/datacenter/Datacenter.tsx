@@ -1,22 +1,22 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, FormEvent } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
-import { useStore } from '../Store/useStore';
+import { useStore } from '../store/useStore';
 import { useQuery, useMutation, useQueryClient} from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookie from "cookie-universal"
-import { useNavigate } from 'react-router-dom';
 
-export default function Manage_Datacentres() {
+export default function Datacentre() {
 
     const navigate = useNavigate()
-
-    const id = useStore((state) => state.id);
-    const setId = useStore((state) => state.setId);
+    
+    const { id } = useStore();
+    const { setId } = useStore();
 
     const cookie = Cookie()
 
@@ -38,39 +38,39 @@ export default function Manage_Datacentres() {
     const { data, refetch, isError, error } = useQuery ('data', fetchData)
 
     if(isError) {
-        if (error.message === 'Request failed with status code 401') {
+        if ((error as Error).message === 'Request failed with status code 401') {
             navigate('/')  
         }
     }
 
-    const deleteMethod = useMutation((id) => {
+    const deleteMethod = useMutation((id:number) => {
         return axios.delete(`https://vv3eyp0jq4.execute-api.eu-central-1.amazonaws.com/test/api/dashboard/datacenters/remove/${id}`,
         {
         headers: {
-          'Authorization': `token ${myToken}`
+            'Authorization': `token ${myToken}`
         }
         })
-      },
-      {
+        },
+        {
         onSuccess: () => {
             queryClient.invalidateQueries('data');
             toast.current?.show({severity:'success', summary: 'Success', detail:'delete is Completed', life: 3000});
         },
-        onError: (error) => {
+        onError: (error:Error) => {
             if (error.message === 'Request failed with status code 401') {
                 navigate('/')  
             }
             toast.current?.show({severity:'error', summary: 'Error', detail:'delete is not Completed', life: 3000});
         },
-      }
-      ) 
+        }
+    ) 
 
-    const data2 = data?.data.map((item: object,index: number) =>item = {...item,id:index});
+    const data2 = data?.data.map((item:object,index:number) =>item = {...item,id:index});
 
     const [globalFilter, setGlobalFilter] = useState<string | null>(null);
 
     const [visible, setVisible] = useState<boolean>(false);
-     
+
     const [visible2, setVisible2] = useState<boolean>(false);
 
     const [name, setName] = useState<string>('');
@@ -85,14 +85,20 @@ export default function Manage_Datacentres() {
         setVisible(true);
     }
 
-    const editRow = async (row: object) => {
+    type row = {
+        name: string,
+        url: string,
+        PK: number
+    }
+
+    const editRow = async (row: row) => {
         setVisible2(true);
         setName2(row.name)
         setUrl2(row.url)
         setId(row.PK)
     };
 
-    const deleteRow =  (row: object) => { 
+    const deleteRow =  (row: row) => { 
         deleteMethod.mutate(row.PK)
     };
 
@@ -101,13 +107,13 @@ export default function Manage_Datacentres() {
             <h4 className="m-0">Manage Products</h4>
             <span className="p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter((e.target as HTMLInputElement).value)} placeholder="Search..." />
                 <Button className='ml-3 mr-3' label="New" icon="pi pi-plus" severity="success" onClick={openNew} />
             </span>
         </div>
     );
 
-    const actionBodyTemplate = (rowData: object) => {
+    const actionBodyTemplate = (rowData: row) => {
         return (
             <>
                 <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => editRow(rowData)} />
@@ -122,7 +128,7 @@ export default function Manage_Datacentres() {
         setUrl('')
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e:FormEvent) => {
         e.preventDefault(); 
         try {
                 await axios.post('https://vv3eyp0jq4.execute-api.eu-central-1.amazonaws.com/test/api/dashboard/datacenters/add',
@@ -140,15 +146,15 @@ export default function Manage_Datacentres() {
             toast.current?.show({severity:'success', summary: 'Success', detail:'add is Completed', life: 3000});
             handleVisible()
         } catch (error) {
-            if (error.message === 'Request failed with status code 401') {
-                navigate('/')  
+            if ((error instanceof Error)) {
+                error.message === 'Request failed with status code 401' ? navigate('/') : null
             }
             toast.current?.show({severity:'error', summary: 'Error', detail:'add is not Completed', life: 3000});
         }
         
     }
 
-    const handleUpdate = async (e) => {
+    const handleUpdate = async (e:FormEvent) => {
         e.preventDefault();
         try {
                 await axios.put('https://vv3eyp0jq4.execute-api.eu-central-1.amazonaws.com/test/api/dashboard/datacenters/update',
@@ -166,8 +172,8 @@ export default function Manage_Datacentres() {
             refetch();
             toast.current?.show({severity:'success', summary: 'Success', detail:'update is Completed', life: 3000});
         } catch (error) {
-            if (error.message === 'Request failed with status code 401') {
-                navigate('/')  
+            if ((error instanceof Error)) {
+                error.message === 'Request failed with status code 401' ? navigate('/') : null
             }
             toast.current?.show({severity:'error', summary: 'Error', detail:'update is not Completed', life: 3000});
         }

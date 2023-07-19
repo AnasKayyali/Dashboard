@@ -1,5 +1,11 @@
 import { create } from 'zustand'
-export const useStore = create(
+
+type store = {
+  id:any,
+  setId: (id:any) => void
+}
+
+export const useStore = create<store>(
   (set) => ({
   id: null,
   setId: (id) => {

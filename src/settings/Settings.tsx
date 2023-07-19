@@ -7,7 +7,7 @@ import axios from 'axios';
 import Cookie from "cookie-universal"
 import { useNavigate } from 'react-router-dom';
 
-export default function Manage_Settings() {
+export default function Settings() {
 
     const navigate = useNavigate()
 
@@ -18,7 +18,7 @@ export default function Manage_Settings() {
     const fetchSettings = () => {
         return axios.get('https://vv3eyp0jq4.execute-api.eu-central-1.amazonaws.com/test/api/dashboard/settings/all',{
             headers: {
-              'Authorization': `token ${myToken}`
+                'Authorization': `token ${myToken}`
             }
         }
         )  
@@ -40,7 +40,7 @@ export default function Manage_Settings() {
             <h4 className="m-0">Manage Products</h4>
             <span className="p-input-icon-left">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e:any) => setGlobalFilter(e.target.value)} placeholder="Search..." />
             </span>
         </div>
     );
